@@ -1,6 +1,6 @@
 # 💎 Zovelo – Jewelry E-Commerce Website
 
-Zovelo is a custom-built, responsive jewelry e-commerce website designed and developed by **Kenshin Angcaya** as part of a personal portfolio and freelance project.  
+Zovelo is a custom-built, responsive jewelry e-commerce website designed and developed by **Kenshin Angcaya** as part of a personal portfolio and university project.  
 It was created for a real-world brand — **Zovelo**, a jewelry business based in the Philippines, owned by a friend of the developer.
 
 This project showcases a full-stack .NET Core implementation of a modern online shopping experience.
