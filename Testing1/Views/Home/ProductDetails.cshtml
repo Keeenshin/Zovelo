@@ -1,0 +1,127 @@
+﻿@model Testing1.Models.Product
+
+@{
+    var productImages = ViewData["ProductImages"] as List<string>;
+    var recommendations = ViewData["Recommendations"] as List<Testing1.Models.Product>;
+}
+
+<div class="product-details-page">
+    <a href="@Url.Action("Catalogue", "Home")" class="back-button">← Back to Catalogue</a>
+
+    <div class="product-details-info">
+        <div class="carousel-container">
+            <div class="carousel-images" id="carousel-images">
+                @if (productImages != null && productImages.Any())
+                {
+                    @foreach (var img in productImages)
+                    {
+                        <img src="@Url.Content($"~/images/{img}")" alt="@Model.Name">
+                    }
+                }
+                else
+                {
+                    <p>No images available.</p>
+                }
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-button" onclick="moveSlide(-1)">❮</button>
+                <button class="carousel-button" onclick="moveSlide(1)">❯</button>
+            </div>
+        </div>
+
+        <div class="product-details-description">
+            <h2>@Model.Name</h2>
+            <p class="product-details-price">Price: $@Model.Price</p>
+            <p class="product-details-desc">Description: @Model.Description</p>
+
+            <!-- Add to Cart with Quantity -->
+            <form id="add-to-cart-form" onsubmit="event.preventDefault(); addToCart(@Model.Id);">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" value="1" min="1" max="10" />
+                <button type="submit" class="product-details-buy-button">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="add-to-cart-notification" id="addToCartNotification">
+        <div class="notification-content">
+            <i class="fa fa-check-circle notification-icon"></i>
+            <div class="notification-info">
+                <p class="notification-title">Added to Bag</p>
+                <div class="notification-details">
+                    <img src="" id="notification-product-image" alt="Product Image" class="notification-product-image" />
+                    <div>
+                        <p id="notification-product-name"></p>
+                        <p id="notification-product-price"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="product-details-recommendations">
+        <h3>Similar Products</h3>
+
+        <div class="product-details-recommendation-list">
+            @if (recommendations != null && recommendations.Any())
+            {
+                @foreach (var product in recommendations)
+                {
+                    <div class="product-details-recommendation-card">
+                        <img src="@Url.Content($"/images/{product.ImageUrls.Split(',')[0]}")" alt="@product.Name" class="product-details-recommended-img">
+                        <h4>@product.Name</h4>
+                        <p>Price: $@product.Price</p>
+                        <a href="@Url.Action("ProductDetails", "Home", new { id = product.Id })"
+                           class="product-details-buy-button">View Details</a>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No similar products available.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function addToCart(productId) {
+        var quantity = document.getElementById("quantity").value;
+
+        $.ajax({
+            url: '@Url.Action("AddToCart", "Cart")',
+            type: 'POST',
+            data: { productId: productId, quantity: quantity },
+            success: function (response) {
+                if (response.success) {
+                    document.getElementById('notification-product-image').src = response.productImage;
+                    document.getElementById('notification-product-name').innerText = response.productName;
+                    document.getElementById('notification-product-price').innerText = '$' + response.productPrice.toFixed(2);
+
+                    var notification = document.getElementById('addToCartNotification');
+                    notification.style.display = 'block';
+
+                    setTimeout(function () {
+                        notification.style.display = 'none';
+                    }, 3000);
+                }
+            },
+            error: function () {
+                alert('An error occurred. Please try again.');
+            }
+        });
+    }
+
+    let currentSlide = 0;
+    function moveSlide(n) {
+        const slides = document.getElementById('carousel-images');
+        const totalSlides = slides.children.length;
+        currentSlide += n;
+        if (currentSlide >= totalSlides) currentSlide = 0;
+        if (currentSlide < 0) currentSlide = totalSlides - 1;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+</script>

@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model List<Testing1.Models.Product>
+
+<div class="hero-section">
+    <div class="image-container">
+        <img src="~/images/Zovelo-Hero-image1.jpg" alt="Zovelo Photo" class="hero-image" />
+    </div>
+    <div class="content-container">
+        <h1 class="hero-title">EMBRACE THE EXTRAORDINARY WITH ZOVELO.</h1>
+        <p class="hero-subtitle">Zovelo offers more than just jewelry; we craft expressions of your unique style. Each piece is meticulously designed to bring out the elegance within you. Explore our collections and find the perfect piece to mark your moments and memories.</p>
+        <a href="@Url.Action("Catalogue", "Home")" class="hero-button">Shop Now</a>
+    </div>
+</div>
+
+
+
+
+<div class="home-page">
+    <section class="featured-products">
+        <div class="container">
+            <h2 class="featured-section-title">Featured Products</h2>
+            <div class="featured-row">
+                @if (ViewBag.FeaturedProducts != null)
+                {
+                    foreach (var product in ViewBag.FeaturedProducts)
+                    {
+                        <div class="featured-product-card">
+                            <a href="@Url.Action("ProductDetails", "Home", new { id = product.Id })">
+                                <img src="@Url.Content($"~/images/{product.ImageUrls.Split(',')[0]}")" alt="@product.Name" class="product-image" />
+                            </a>
+                            <div class="featured-product-info">
+                                <h5 class="product-name">@product.Name</h5>
+                                <p class="product-price">@product.Price.ToString("C")</p>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="text-center">
+                <a href="@Url.Action("Catalogue", "Home")" class="featured-btn-primary">View All Products</a>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div class="about-section">
+    <div class="about-container">
+        <div class="about-text">
+            <h2 class="about-title">nice to meet you</h2>
+            <p>At Zovelo, we believe that jewelry is more than just an accessory—it's a personal expression, a celebration of life’s most meaningful moments. Inspired by timeless elegance and crafted with meticulous attention to detail, each piece in our collection embodies sophistication, grace, and individuality. Whether it’s a symbol of love, a cherished memory, or a statement of style, Zovelo’s designs are meant to inspire and empower. Our commitment to quality ensures that every creation is not only beautiful but also enduring, allowing you to carry your moments with you forever. Discover the art of fine jewelry with Zovelo, and let your story shine through.</p>
+        </div>
+        <div class="about-image-container">
+            <img src="~/images/ZoveloMeetus.jpg" alt="About Zovelo" class="about-image">
+        </div>
+    </div>
+</div>
+
+
+
+<div class="contact-info-section">
+    <div class="container">
+        <div class="contact-info-row">
+            <div class="contact-info-box">
+                <i class="fas fa-map-marker-alt contact-icon"></i>
+                <h4 class="contact-title">Location</h4>
+                <p>Binan City, Laguna,<br/> Philippines</p>
+                <a class="contact-link">Find Us On Map</a>
+            </div>
+
+            <div class="contact-info-box">
+                <i class="fas fa-clock contact-icon"></i>
+                <h4 class="contact-title">Office Hour</h4>
+                <p>Monday - Friday<br />08:00 - 20:00</p>
+                <a class="contact-link">Get Direction</a>
+            </div>
+
+            <div class="contact-info-box">
+                <i class="fas fa-phone contact-icon"></i>
+                <h4 class="contact-title">Phone Number</h4>
+                <p>(+1) 212-946-2064<br />(+3) 112-976-2067</p>
+                <a class="contact-link">Call Now</a>
+            </div>
+
+            <div class="contact-info-box">
+                <i class="fas fa-envelope contact-icon"></i>
+                <h4 class="contact-title">E-mail Address</h4>
+                <p>Zovelo.ph@gmail.com<br />Zovelo.ph@yahoo.com</p>
+                <a class="contact-link">Mail Us</a>
+            </div>
+        </div>
+    </div>
+</div>

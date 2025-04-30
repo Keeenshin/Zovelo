@@ -1,0 +1,83 @@
+﻿@model List<Zovelo.Models.CartItem>
+<link href="~/css/CartStyle.css" rel="stylesheet" />
+
+<div class="cart-page-container">
+    <h2 class="cart-page-title">Your Cart</h2>
+    <a href="@Url.Action("Catalogue", "Home")" class="cart-page-continue-shopping">Continue shopping</a>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="cart-page-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="cart-page-item">
+                                <img src="@Url.Content($"~/images/{item.ImageUrl}")" alt="@item.ProductName" class="cart-product-image" />
+                                <div class="cart-page-item-info">
+                                    <p>@item.ProductName</p>
+                                    <p class="cart-page-item-price">@item.Price.ToString("C")</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="cart-page-quantity-control">
+                                <button class="cart-page-btn-quantity" onclick="updateQuantity('@item.ProductId', -1)">-</button>
+                                <input type="text" value="@item.Quantity" readonly class="cart-page-quantity-input" />
+                                <button class="cart-page-btn-quantity" onclick="updateQuantity('@item.ProductId', 1)">+</button>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="cart-page-item-total">@((item.Quantity * item.Price).ToString("C"))</p>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("RemoveFromCart", "Cart", new { productId = item.ProductId })" class="cart-page-btn-remove">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="cart-page-summary">
+            <p>Total: @Model.Sum(item => item.Price * item.Quantity).ToString("C")</p>
+            <a href="#" class="cart-page-btn-checkout">Proceed to Checkout</a>
+        </div>
+    }
+    else
+    {
+        <p>Your cart is empty.</p>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function updateQuantity(productId, amount) {
+            $.ajax({
+                url: '@Url.Action("AddToCart", "Cart")',
+                type: 'POST',
+                data: { productId: productId, quantity: amount },
+                success: function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Failed to update the cart.');
+                    }
+                },
+                error: function () {
+                    alert('Error updating quantity.');
+                }
+            });
+        }
+    </script>
+}

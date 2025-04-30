@@ -1,0 +1,96 @@
+﻿@model List<Testing1.Models.Product>
+
+<div class="catalogue-container">
+    <h1>Our Collection</h1>
+
+    <div class="filters">
+        <select id="filter-type" onchange="filterProducts()">
+            <option value="">Type of Jewelry</option>
+            <option value="necklace">Necklaces</option>
+            <option value="bracelet">Bracelets</option>
+            <option value="earrings">Earrings</option>
+            <option value="ring">Rings</option>
+            <option value="bangle">Bangle</option>
+        </select>
+
+        <select id="filter-price" onchange="filterProducts()">
+            <option value="">Sort by Price</option>
+            <option value="low-to-high">Low-Price to High-Price</option>
+            <option value="high-to-low">High-Price to Low-Price</option>
+        </select>
+
+        <select id="filter-best-selling" onchange="filterProducts()">
+            <option value="">Sort by</option>
+            <option value="best-selling">Best Seller</option>
+        </select>
+
+        <button onclick="resetFilters()" class="reset-button">Reset Filters</button>
+    </div>
+
+    <div class="product-list">
+        @foreach (var product in Model)
+        {
+            <div class="product-card"
+                 data-type="@product.Type"
+                 data-price="@product.Price"
+                 data-bestselling="@product.BestSelling">
+
+                <img src="@Url.Content($"~/images/{(!string.IsNullOrEmpty(product.ImageUrls) && product.ImageUrls.Split(',').Length > 0 ? product.ImageUrls.Split(',')[0] : "default-image.png")}")" alt="@product.Name" class="product-image" />
+
+                <h3>@(string.IsNullOrEmpty(product.Name) ? "No Name Available" : product.Name)</h3>
+
+                <p>@(string.IsNullOrEmpty(product.Description) ? "No Description Available" : product.Description)</p>
+
+                <p class="price">Price: @(product.Price > 0 ? $"${product.Price}" : "N/A")</p>
+
+                <a href="@Url.Action("ProductDetails", "Home", new { id = product.Id })" class="buy-button">View Details</a>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function filterProducts() {
+        const type = document.getElementById("filter-type").value;
+        const price = document.getElementById("filter-price").value;
+        const bestSelling = document.getElementById("filter-best-selling").value;
+
+        const productCards = document.getElementsByClassName("product-card");
+
+        for (let i = 0; i < productCards.length; i++) {
+            const productType = productCards[i].getAttribute("data-type");
+            const productPrice = parseFloat(productCards[i].getAttribute("data-price"));
+            const productBestSelling = productCards[i].getAttribute("data-bestselling") === "True";
+
+            let showProduct = true;
+
+            if (type && type !== productType) {
+                showProduct = false;
+            }
+
+            if (price === "low-to-high") {
+                productCards[i].style.order = productPrice;
+            } else if (price === "high-to-low") {
+                productCards[i].style.order = -productPrice;
+            }
+
+            if (bestSelling === "best-selling" && !productBestSelling) {
+                showProduct = false;
+            }
+
+            productCards[i].style.display = showProduct ? "block" : "none";
+        }
+    }
+
+    function resetFilters() {
+        document.getElementById("filter-type").value = "";
+        document.getElementById("filter-price").value = "";
+        document.getElementById("filter-best-selling").value = "";
+
+        const productCards = document.getElementsByClassName("product-card");
+        for (let i = 0; i < productCards.length; i++) {
+            productCards[i].style.display = "block";
+            productCards[i].style.order = "0";
+        }
+    }
+</script>
