@@ -121,7 +121,6 @@ Testing1/
 - Homepage
 ![image](https://github.com/user-attachments/assets/c28611e6-7d1c-4629-b02e-476e10bec2cb)
 ![image](https://github.com/user-attachments/assets/dc3e59a9-ff4c-49ef-99b9-55cf4eea52d4)
-![image](https://github.com/user-attachments/assets/e6db22ec-324f-41ec-adbc-4e782eec760d)
 ![image](https://github.com/user-attachments/assets/4db3e342-1b2a-4140-9bcf-5e2c51d601c9)
 
 - Product catalog
